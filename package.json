@@ -1,0 +1,27 @@
+{
+  "name": "better-schedule",
+  "version": "1.0.0",
+  "description": "A better alternative to 不揪？ - Cross-school schedule sharing tool",
+  "main": "server/index.js",
+  "scripts": {
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "server": "cd server && npm run dev",
+    "client": "cd client && npm start",
+    "build": "cd client && npm run build",
+    "install-all": "npm install && cd server && npm install && cd ../client && npm install"
+  },
+  "keywords": [
+    "schedule",
+    "timetable",
+    "school",
+    "sharing"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "dependencies": {
+    "firebase": "^12.2.1"
+  }
+}

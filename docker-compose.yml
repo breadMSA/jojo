@@ -1,0 +1,55 @@
+version: '3.8'
+
+services:
+  # 後端服務
+  backend:
+    build: ./server
+    ports:
+      - "5000:5000"
+    environment:
+      - NODE_ENV=production
+      - PORT=5000
+      - FIREBASE_PROJECT_ID=${FIREBASE_PROJECT_ID}
+      - FIREBASE_PRIVATE_KEY=${FIREBASE_PRIVATE_KEY}
+      - FIREBASE_CLIENT_EMAIL=${FIREBASE_CLIENT_EMAIL}
+      - CLIENT_URL=http://localhost:3000
+    volumes:
+      - ./server:/app
+      - /app/node_modules
+    restart: unless-stopped
+
+  # 前端服務
+  frontend:
+    build: ./client
+    ports:
+      - "3000:80"
+    environment:
+      - REACT_APP_API_BASE_URL=http://localhost:5000/api
+      - REACT_APP_FIREBASE_API_KEY=${REACT_APP_FIREBASE_API_KEY}
+      - REACT_APP_FIREBASE_AUTH_DOMAIN=${REACT_APP_FIREBASE_AUTH_DOMAIN}
+      - REACT_APP_FIREBASE_PROJECT_ID=${REACT_APP_FIREBASE_PROJECT_ID}
+      - REACT_APP_FIREBASE_STORAGE_BUCKET=${REACT_APP_FIREBASE_STORAGE_BUCKET}
+      - REACT_APP_FIREBASE_MESSAGING_SENDER_ID=${REACT_APP_FIREBASE_MESSAGING_SENDER_ID}
+      - REACT_APP_FIREBASE_APP_ID=${REACT_APP_FIREBASE_APP_ID}
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+  # 開發環境（可選）
+  dev-backend:
+    build: ./server
+    ports:
+      - "5001:5000"
+    environment:
+      - NODE_ENV=development
+      - PORT=5000
+      - FIREBASE_PROJECT_ID=${FIREBASE_PROJECT_ID}
+      - FIREBASE_PRIVATE_KEY=${FIREBASE_PRIVATE_KEY}
+      - FIREBASE_CLIENT_EMAIL=${FIREBASE_CLIENT_EMAIL}
+      - CLIENT_URL=http://localhost:3000
+    volumes:
+      - ./server:/app
+      - /app/node_modules
+    command: npm run dev
+    profiles:
+      - dev
